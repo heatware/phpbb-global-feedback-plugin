@@ -1,0 +1,3 @@
+HeatWare_integration_controller:
+    path: /demo/{name}
+    defaults: { _controller: HeatWare.integration.controller:handle }

@@ -1,0 +1,26 @@
+imports:
+    - { resource: parameters.yml }
+
+services:
+    HeatWare.integration.controller:
+        class: HeatWare\integration\controller\main
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@user'
+
+    HeatWare.integration.service:
+        class: HeatWare\integration\service
+        arguments:
+            - '@user'
+            - '%HeatWare.integration.tables.demo_table%'
+
+    HeatWare.integration.cron.task.demo:
+        class: HeatWare\integration\cron\task\demo
+        arguments:
+            - '@config'
+        calls:
+            - [set_name, [cron.task.demo]]
+        tags:
+            - { name: cron.task }
