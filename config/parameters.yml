@@ -1,2 +1,2 @@
 parameters:
-    HeatWare.integration.tables.demo_table: '%core.table_prefix%demo_table'
+    HeatWare.integration.tables.heatware_cache: '%core.table_prefix%heatware_cache'
