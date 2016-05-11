@@ -17,7 +17,7 @@ class install_acp_module extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
-		return isset($this->config['acme_demo_goodbye']);
+		return isset($this->config['heatware_api_key']);
 	}
 
 	static public function depends_on()
@@ -28,16 +28,16 @@ class install_acp_module extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
-			array('config.add', array('acme_demo_goodbye', 0)),
+			array('config.add', array('heatware_api_key', 0)),
 
 			array('module.add', array(
 				'acp',
 				'ACP_CAT_DOT_MODS',
-				'ACP_DEMO_TITLE'
+				'ACP_HEATWARE_SETTINGS_TITLE'
 			)),
 			array('module.add', array(
 				'acp',
-				'ACP_DEMO_TITLE',
+				'ACP_HEATWARE_SETTINGS_TITLE',
 				array(
 					'module_basename'	=> '\HeatWare\integration\acp\main_module',
 					'modes'				=> array('settings'),
