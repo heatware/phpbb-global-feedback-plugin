@@ -14,7 +14,7 @@ services:
         class: HeatWare\integration\service
         arguments:
             - '@user'
-            - '%HeatWare.integration.tables.demo_table%'
+            - '%HeatWare.integration.tables.heatware_cache%'
 
     HeatWare.integration.cron.task.demo:
         class: HeatWare\integration\cron\task\demo
