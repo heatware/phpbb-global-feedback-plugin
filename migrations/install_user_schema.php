@@ -6,7 +6,7 @@ class install_user_schema extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
-		return $this->db_tools->sql_column_exists($this->table_prefix . 'users', 'user_acme');
+		return $this->db_tools->sql_column_exists($this->table_prefix . 'users', 'heatware_id');
 	}
 
 	static public function depends_on()
@@ -17,18 +17,14 @@ class install_user_schema extends \phpbb\db\migration\migration
 	public function update_schema()
 	{
 		return array(
-			'add_tables'		=> array(
-				$this->table_prefix . 'acme_demo'	=> array(
-					'COLUMNS'		=> array(
-						'acme_id'			=> array('UINT', null, 'auto_increment'),
-						'acme_name'			=> array('VCHAR:255', ''),
-					),
-					'PRIMARY_KEY'	=> 'acme_id',
-				),
-			),
 			'add_columns'	=> array(
-				$this->table_prefix . 'users'			=> array(
-					'user_acme'				=> array('UINT', 0),
+				$this->table_prefix . 'users' => array(
+					'heatware_enabled'			=> array('BOOL', 0),
+					'heatware_id'				=> array('UINT', 0),
+                    'heatware_suspended'		=> array('BOOL', 0),
+                    'heatware_positive'			=> array('USINT', 0),
+                    'heatware_negative'			=> array('USINT', 0),
+                    'heatware_neutral'			=> array('USINT', 0),
 				),
 			),
 		);
@@ -38,12 +34,14 @@ class install_user_schema extends \phpbb\db\migration\migration
 	{
 		return array(
 			'drop_columns'	=> array(
-				$this->table_prefix . 'users'			=> array(
-					'user_acme',
+				$this->table_prefix . 'users' => array(
+                    'heatware_enabled',
+                    'heatware_id',
+                    'heatware_suspended',
+                    'heatware_positive',
+                    'heatware_negative',
+                    'heatware_neutral',
 				),
-			),
-			'drop_tables'		=> array(
-				$this->table_prefix . 'acme_demo',
 			),
 		);
 	}
