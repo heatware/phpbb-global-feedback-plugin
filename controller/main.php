@@ -33,7 +33,7 @@ class main
 	}
 
 	/**
-	* Demo controller for route /demo/{name}
+	* Demo controller for route /integration/{name}
 	*
 	* @param string		$name
 	* @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
@@ -43,6 +43,6 @@ class main
 		$l_message = !$this->config['acme_demo_goodbye'] ? 'DEMO_HELLO' : 'DEMO_GOODBYE';
 		$this->template->assign_var('DEMO_MESSAGE', $this->user->lang($l_message, $name));
 
-		return $this->helper->render('demo_body.html', $name);
+		return $this->helper->render('acp_body.html', $name);
 	}
 }
