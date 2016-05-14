@@ -3,7 +3,7 @@
 namespace HeatWare\integration\cron\task;
 
 /**
- * Acme demo cron task.
+ * Cron task for updating the local feedback cache
  */
 class demo extends \phpbb\cron\task\base
 {
@@ -37,7 +37,7 @@ class demo extends \phpbb\cron\task\base
 
 		// Update the cron task run time here if it hasn't
 		// already been done by your cron actions.
-		$this->config->set('acme_cron_last_run', time(), false);
+		$this->config->set('heatware_sync_last_run', time(), false);
 	}
 
 	/**
@@ -61,6 +61,6 @@ class demo extends \phpbb\cron\task\base
 	*/
 	public function should_run()
 	{
-		return $this->config['acme_cron_last_run'] < time() - $this->cron_frequency;
+		return $this->config['heatware_sync_last_run'] < time() - $this->cron_frequency;
 	}
 }
