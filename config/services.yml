@@ -10,14 +10,8 @@ services:
             - '@template'
             - '@user'
 
-    HeatWare.integration.service:
-        class: HeatWare\integration\service
-        arguments:
-            - '@user'
-            - '%HeatWare.integration.tables.heatware_cache%'
-
     HeatWare.integration.cron.task.heatware_sync:
-        class: HeatWare\integration\cron\task\heatware_sync
+        class: HeatWare\integration\cron\task\HeatWareSync
         arguments:
             - '@config'
         calls:
