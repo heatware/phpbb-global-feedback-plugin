@@ -11,7 +11,7 @@ class main_info
 			'title'		=> 'HeatWare',
 			'modes'		=> array(
 				'settings'	=> array(
-					'title'	=> 'HeatWare',
+					'title'	=> 'Integration Settings',
 					'auth'	=> 'ext_HeatWare/integration && acl_a_board',
 					'cat'	=> array('HeatWare')
 				),
