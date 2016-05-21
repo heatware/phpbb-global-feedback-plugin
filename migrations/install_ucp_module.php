@@ -28,11 +28,11 @@ class install_ucp_module extends \phpbb\db\migration\migration
 			array('module.add', array(
 				'ucp',
 				0,
-				'HEATWARE_SETTINGS_TITLE'
+				'HeatWare'
 			)),
 			array('module.add', array(
 				'ucp',
-				'HEATWARE_SETTINGS_TITLE',
+				'HeatWare',
 				array(
 					'module_basename'	=> '\HeatWare\integration\ucp\main_module',
 					'modes'				=> array('settings'),

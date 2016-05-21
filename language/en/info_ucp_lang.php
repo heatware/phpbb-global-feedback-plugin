@@ -11,5 +11,5 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'HEATWARE_SHOW_BADGE_UCP'				=> 'Show my HeatWare badge',
+	'HEATWARE_SHOW_BADGE_SETTING'				=> 'Show my HeatWare badge',
 ));

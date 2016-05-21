@@ -10,12 +10,13 @@ class main_module
 	{
 		global $db, $request, $template, $user;
 
+		$user->add_lang_ext('HeatWare/integration', 'common');
 		$this->tpl_name = 'ucp_body';
 		$this->page_title = $user->lang('HEATWARE_SETTINGS_TITLE');
 		add_form_key('heatware/integration');
 
 		$data = array(
-			'heatware_enabled' => $request->variable('heatware_enabled', $user->data['heatware_enabled']),
+			'heatware_show_badge' => $request->variable('heatware_show_badge', $user->data['heatware_show_badge']),
 		);
 
 		if ($request->is_set_post('submit'))
@@ -37,6 +38,7 @@ class main_module
 
 		$template->assign_vars(array(
 			'S_HEATWARE_ENABLED'	=> $data['heatware_enabled'],
+			'L_HEATWARE_SHOW_BADGE'	=> $user->lang('HEATWARE_SHOW_BADGE_SETTING'),
 			'S_UCP_ACTION'	=> $this->u_action,
 		));
 	}

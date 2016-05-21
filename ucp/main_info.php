@@ -8,12 +8,12 @@ class main_info
 	{
 		return array(
 			'filename'	=> '\HeatWare\integration\ucp\main_module',
-			'title'		=> 'HEATWARE_SETTINGS_TITLE',
+			'title'		=> 'HeatWare',
 			'modes'		=> array(
 				'settings'	=> array(
-					'title'	=> 'HEATWARE_TITLE',
+					'title'	=> 'User Settings',
 					'auth'	=> 'ext_HeatWare/integration',
-					'cat'	=> array('HEATWARE_SETTINGS_TITLE')
+					'cat'	=> array('HeatWare')
 				),
 			),
 		);
