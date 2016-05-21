@@ -16,11 +16,11 @@ services:
             - '@user'
             - '%HeatWare.integration.tables.heatware_cache%'
 
-    HeatWare.integration.cron.task.demo:
-        class: HeatWare\integration\cron\task\demo
+    HeatWare.integration.cron.task.heatware_sync:
+        class: HeatWare\integration\cron\task\heatware_sync
         arguments:
             - '@config'
         calls:
-            - [set_name, [cron.task.demo]]
+            - [set_name, [cron.task.heatware_sync]]
         tags:
             - { name: cron.task }
