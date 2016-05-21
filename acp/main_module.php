@@ -29,6 +29,7 @@ class main_module
 
 		$template->assign_vars(array(
 			'U_ACTION'				=> $this->u_action,
+            'L_HEATWARE_CRON_FREQUENCY' => $user->lang('HEATWARE_CRON_SETTING'),
 			'HEATWARE_API_KEY'		=> $config['heatware_api_key'],
 			'HEATWARE_CRON_FREQUENCY' => $config['heatware_cron_frequency'],
 		));
