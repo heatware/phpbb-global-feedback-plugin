@@ -22,17 +22,34 @@ class main_module
 				trigger_error('FORM_INVALID');
 			}
 
-			$config->set('heatware_api_key', $request->variable('heatware_api_key', 0));
+            // Don't allow sync times of less than 1 hour
+            $sync_frequency = $request->variable('heatware_sync_frequency', $config['heatware_sync_frequency']);
+            if( $sync_frequency < 3600 )
+            {
+                $sync_frequency = 3600;
+            }
 
-			trigger_error($user->lang('HEATWARE_SETTING_SAVED') . adm_back_link($this->u_action));
+			$config->set('heatware_api_key', $request->variable('heatware_api_key', $config['heatware_api_key']));
+            $config->set('heatware_sync_frequency', $sync_frequency );
+            $config->set('heatware_global_enable', $request->variable('heatware_global_enable', 0));
+
+			trigger_error($user->lang('HEATWARE_SAVED') . adm_back_link($this->u_action));
 		}
 
+        $global_enable_setting = '';
+        if( $config['heatware_global_enable'] )
+        {
+            $global_enable_setting = 'checked';
+        }
+
 		$template->assign_vars(array(
-			'U_ACTION'				=> $this->u_action,
-            'L_HEATWARE_CRON_FREQUENCY' => $user->lang('HEATWARE_CRON_SETTING'),
-            'L_HEATWARE_API_KEY' => $user->lang('HEATWARE_API_KEY_SETTING'),
-			'HEATWARE_API_KEY'		=> $config['heatware_api_key'],
-			'HEATWARE_CRON_FREQUENCY' => $config['heatware_cron_frequency'],
+			'U_ACTION'                  => $this->u_action,
+            'L_HEATWARE_API_KEY'        => $user->lang('HEATWARE_API_KEY_SETTING'),
+			'S_HEATWARE_API_KEY'		=> $config['heatware_api_key'],
+            'L_HEATWARE_SYNC_FREQUENCY' => $user->lang('HEATWARE_SYNC_SETTING'),
+			'S_HEATWARE_SYNC_FREQUENCY' => $config['heatware_sync_frequency'],
+            'L_HEATWARE_GLOBAL_ENABLE' => $user->lang('HEATWARE_GLOBAL_SETTING'),
+            'S_HEATWARE_GLOBAL_ENABLE' => $global_enable_setting,
 		));
 	}
 }
