@@ -16,7 +16,7 @@ class main_module
 		add_form_key('heatware/integration');
 
 		$data = array(
-			'heatware_enabled' => $request->variable('heatware_enabled', $user->data['heatware_enabled']),
+			'heatware_enabled' => $request->variable('heatware_enabled', 0),
 		);
 
 		if ($request->is_set_post('submit'))
