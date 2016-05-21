@@ -9,7 +9,7 @@ class install_ucp_module extends \phpbb\db\migration\migration
 		$sql = 'SELECT module_id
 			FROM ' . $this->table_prefix . "modules
 			WHERE module_class = 'ucp'
-				AND module_langname = 'UCP_DEMO_TITLE'";
+				AND module_langname = 'HEATWARE_SETTINGS_TITLE'";
 		$result = $this->db->sql_query($sql);
 		$module_id = $this->db->sql_fetchfield('module_id');
 		$this->db->sql_freeresult($result);
@@ -28,11 +28,11 @@ class install_ucp_module extends \phpbb\db\migration\migration
 			array('module.add', array(
 				'ucp',
 				0,
-				'UCP_DEMO_TITLE'
+				'HEATWARE_SETTINGS_TITLE'
 			)),
 			array('module.add', array(
 				'ucp',
-				'UCP_DEMO_TITLE',
+				'HEATWARE_SETTINGS_TITLE',
 				array(
 					'module_basename'	=> '\HeatWare\integration\ucp\main_module',
 					'modes'				=> array('settings'),

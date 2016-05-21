@@ -40,9 +40,6 @@ class main
 	*/
 	public function handle($name)
 	{
-		$l_message = !$this->config['acme_demo_goodbye'] ? 'DEMO_HELLO' : 'DEMO_GOODBYE';
-		$this->template->assign_var('DEMO_MESSAGE', $this->user->lang($l_message, $name));
-
-		return $this->helper->render('acp_body.html', $name);
+		
 	}
 }

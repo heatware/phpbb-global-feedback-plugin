@@ -52,14 +52,4 @@ class main_listener implements EventSubscriberInterface
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
-
-	/**
-	* Add a link to the controller in the forum navbar
-	*/
-	public function add_page_header_link($event)
-	{
-		$this->template->assign_vars(array(
-			'U_DEMO_PAGE'	=> $this->helper->route('HeatWare_integration_controller', array('name' => 'world')),
-		));
-	}
 }

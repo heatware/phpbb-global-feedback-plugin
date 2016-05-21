@@ -17,16 +17,19 @@ class install_acp_module extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
-			array('config.add', array('heatware_api_key', 0)),
+			array('config.add', array('api_key', '')),
+			array('config.add', array('enable_all', '')),
+			array('config.add', array('api_url_finduser', 'https://www.heatware.com/api/findUser')),
+			array('config.add', array('api_url_getuser', 'https://www.heatware.com/api/user')),
 
 			array('module.add', array(
 				'acp',
 				'ACP_CAT_DOT_MODS',
-				'ACP_HEATWARE_SETTINGS_TITLE'
+				'HEATWARE_SETTINGS_TITLE'
 			)),
 			array('module.add', array(
 				'acp',
-				'ACP_HEATWARE_SETTINGS_TITLE',
+				'HEATWARE_SETTINGS_TITLE',
 				array(
 					'module_basename'	=> '\HeatWare\integration\acp\main_module',
 					'modes'				=> array('settings'),

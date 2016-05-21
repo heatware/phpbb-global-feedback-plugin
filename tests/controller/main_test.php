@@ -6,9 +6,7 @@ class main_test extends \phpbb_test_case
 {
 	public function handle_data()
 	{
-		return array(
-			array(200, 'acp_body.html'),
-		);
+		
 	}
 
 	/**

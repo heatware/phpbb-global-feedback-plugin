@@ -2,6 +2,8 @@
 
 namespace HeatWare\integration\cron\task;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Cron task for updating the local feedback cache
  */
@@ -34,7 +36,12 @@ class demo extends \phpbb\cron\task\base
 	public function run()
 	{
 		// Run your cron actions here...
-
+        $request = Request::create(
+            $this->config['api_url_finduser'],
+            'GET',
+            array('name' => 'Fabien')
+        );
+        $request->headers->set('X-API-KEY', $this->config['heatware_api_key']);
 		// Update the cron task run time here if it hasn't
 		// already been done by your cron actions.
 		$this->config->set('heatware_sync_last_run', time(), false);
