@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Cron task for updating the local feedback cache
  */
-class demo extends \phpbb\cron\task\base
+class HeatWareSync extends \phpbb\cron\task\base
 {
 	/**
 	 * How often we run the cron (in seconds).
@@ -26,6 +26,10 @@ class demo extends \phpbb\cron\task\base
 	public function __construct(\phpbb\config\config $config)
 	{
 		$this->config = $config;
+		if( intval($this->config['heatware_sync_frequency']) > 0 )
+		{
+			$this->cron_frequency = intval($this->config['heatware_api_key']);
+		}
 	}
 
 	/**
@@ -36,12 +40,12 @@ class demo extends \phpbb\cron\task\base
 	public function run()
 	{
 		// Run your cron actions here...
-        $request = Request::create(
+        /*$request = Request::create(
             $this->config['api_url_finduser'],
             'GET',
             array('name' => 'Fabien')
         );
-        $request->headers->set('X-API-KEY', $this->config['heatware_api_key']);
+        $request->headers->set('X-API-KEY', $this->config['heatware_api_key']);*/
 		// Update the cron task run time here if it hasn't
 		// already been done by your cron actions.
 		$this->config->set('heatware_sync_last_run', time(), false);
