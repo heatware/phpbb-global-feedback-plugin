@@ -9,8 +9,7 @@ class main_module
 	function main($id, $mode)
 	{
 		global $config, $request, $template, $user;
-
-		$this->user->add_lang_ext('heatware/integration', array('common', 'acp_lang'));
+		
 		$this->tpl_name = 'acp_body';
 		$this->page_title = $user->lang('HEATWARE_TITLE');
 		add_form_key('HeatWare/integration');
