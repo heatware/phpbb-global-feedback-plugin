@@ -24,7 +24,12 @@ class install_acp_module extends \phpbb\db\migration\migration
 
 			array('module.add', array(
 				'acp',
-				'HeatWare Settings',
+				'ACP_CAT_DOT_MODS',
+				'HeatWare'
+			)),
+			array('module.add', array(
+				'acp',
+				'HeatWare',
 				array(
 					'module_basename'	=> '\HeatWare\integration\acp\main_module',
 					'modes'				=> array('settings'),
