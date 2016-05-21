@@ -11,8 +11,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'HEATWARE_SETTINGS_TITLE'			=> 'HeatWare Settings',
-	'HEATWARE_API_KEY'			=> 'HeatWare API Key',
+	'HEATWARE_SETTINGS_TITLE'	=> 'HeatWare Settings',
 	'HEATWARE_TITLE'			=> 'HeatWare',
 	'HEATWARE_SAVED'			=> 'Settings saved',
 ));

@@ -10,6 +10,7 @@ class main_module
 	{
 		global $config, $request, $template, $user;
 		
+		$user->add_lang_ext('HeatWare/integration', 'common');
 		$this->tpl_name = 'acp_body';
 		$this->page_title = $user->lang('HEATWARE_TITLE');
 		add_form_key('HeatWare/integration');
