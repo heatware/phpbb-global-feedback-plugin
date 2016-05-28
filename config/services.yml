@@ -18,3 +18,8 @@ services:
             - [set_name, [cron.task.heatware_sync]]
         tags:
             - { name: cron.task }
+
+    HeatWare.integration.listener:
+        class: HeatWare\integration\event\listener
+        tags:
+            - { name: event.listener }

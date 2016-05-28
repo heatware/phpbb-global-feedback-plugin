@@ -14,4 +14,5 @@ $lang = array_merge($lang, array(
 	'HEATWARE_SETTINGS_TITLE'	=> 'HeatWare Settings',
 	'HEATWARE_TITLE'			=> 'HeatWare',
 	'HEATWARE_SAVED'			=> 'Settings saved',
+	'HEATWARE_FEEDBACK_PREFIX'	=> 'HeatWare:',
 ));
