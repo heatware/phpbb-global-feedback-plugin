@@ -15,7 +15,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "rmccue/requests": "v1.6.1"
     },
     "extra": {
         "display-name": "HeatWare Integration",
