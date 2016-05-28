@@ -138,7 +138,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 
 	private function get_user_id( $email )
 	{
-		$url = $this->config['api_url_finduser'] . '?' . 'email=' . $email;
+		$url = $this->config['heatware_api_finduser'] . '?' . 'email=' . $email;
 		$response = Requests::get($url, array('X-API-KEY' => $this->config['heatware_api_key']));
 		$status = $response->status_code;
 		if ( $status == 200 )
@@ -161,7 +161,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 
 	private function get_user_info( $user_id )
 	{
-		$url = $this->config['api_url_getuser'] . '?' . 'userId=' . $user_id;
+		$url = $this->config['heatware_api_getuser'] . '?' . 'userId=' . $user_id;
 		$response = Requests::get($url, array('X-API-KEY' => $this->config['heatware_api_key']));
 		$status = $response->status_code;
 		if ( $status == 200 )
