@@ -2,9 +2,6 @@
 
 namespace HeatWare\integration\cron\task;
 
-include('../../vendor/rmccue/requests/library/Requests.php');
-Requests::register_autoloader();
-
 /**
  * Cron task for updating the local feedback cache
  */
@@ -14,7 +11,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 	 * How often we run the cron (in seconds).
 	 * @var int
 	 */
-	protected $cron_frequency = 86400;
+	protected $cron_frequency;
 
 	/** @var \phpbb\config\config */
 	protected $config;
@@ -39,76 +36,50 @@ class HeatWareSync extends \phpbb\cron\task\base
 	{
 		global $db;
 
-		//Array with the data to insert
+		// If globally enabled, check all users. Otherwise only look for users who have enabled it
 		if ( $this->config['heatware_global_enable'] )
+		{
+			$sql = 'SELECT user_id,heatware_id,user_email FROM ' . USERS_TABLE;
+		}
+		else
 		{
 			$sql_array = array(
 				'heatware_enabled' => '1',
 			);
 			$sql = 'SELECT user_id,heatware_id,user_email FROM ' . USERS_TABLE . ' WHERE ' . $db->sql_build_array('SELECT', $sql_array);
 		}
-		else
-		{
-			$sql = 'SELECT user_id,heatware_id,user_email FROM ' . USERS_TABLE;
-		}
 
-		// Run the query
 		$results = $db->sql_query($sql);
 
 		while ( $row = $db->sql_fetchrow($results) )
 		{
-			// Show we got the result we were looking for
+			// What we need
 			$user_id = $row['user_id'];
+			$user_email = $row['user_email'];
 			$heatware_id = $row['heatware_id'];
 
 			// If the heatware id is currently zero we will perform a lookup to see _if_ we can get a valid one
 			if ( $heatware_id == 0 )
 			{
-				$heatware_id = $this->get_user_id($row['user_email']);
+				$heatware_id = $this->get_user_id($user_email);
 
 				if ( $heatware_id > 0 )
 				{
-					$sql_array = array(
-						'heatware_id' => (int)$heatware_id,
-					);
-
-					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
-					$db->sql_query($sql);
+					$this->update_user_heatware_id($db, $heatware_id, $user_id);
 				}
 			}
 
 			// Verify we actually have a heatware id. It's not guaranteed that the lookup above returned a valid id!
 			if ( $heatware_id > 0 )
 			{
-				$account_data = $this->get_user_info( $heatware_id );
-				if ( $account_data['profile']['accountStatus'] == 'SUSPENDED' )
-				{
-					$suspended = 1;
-				}
-				else
-				{
-					$suspended = 0;
-				}
-				$positive = $account_data['profile']['feedback']['numPositive'];
-				$negative = $account_data['profile']['feedback']['numNegative'];
-				$neutral = $account_data['profile']['feedback']['numNeutral'];
+				$feedback = $this->get_user_info( $heatware_id );
 
-				$sql_array = array(
-					'heatware_suspended' => $suspended,
-					'heatware_positive' => (int)$positive,
-					'heatware_negative' => (int)$negative,
-					'heatware_neutral' => (int)$neutral,
-				);
-				$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
-				$db->sql_query($sql);
+				$this->update_user_heatware_feedback($db, $feedback, $user_id);
 			}
 		}
 
-		// Be sure to free the result after a SELECT query
+		// Cleanup
 		$db->sql_freeresult($results);
-
-		// Update the cron task run time here if it hasn't
-		// already been done by your cron actions.
 		$this->config->set('heatware_sync_last_run', time(), false);
 	}
 
@@ -145,8 +116,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 		{
 			//Request OK
 			$body = json_decode( $response->body, true );
-			$api_response = json_decode($body['data'], true );
-			return (int)$api_response['userId'];
+			return (int)$body['userId'];
 		}
 		elseif ( $status == 404 )
 		{
@@ -167,12 +137,46 @@ class HeatWareSync extends \phpbb\cron\task\base
 		if ( $status == 200 )
 		{
 			//Request OK
-			$body = json_decode( $response->body, true );
-			return json_decode($body['data'], true );
+			$account_data = json_decode( $response->body, true );
+			if ( $account_data['profile']['accountStatus'] == 'SUSPENDED' )
+			{
+				$feedback['status'] = 1;
+			}
+			else
+			{
+				$feedback['status'] = 0;
+			}
+			$feedback['positive'] = (int)$account_data['profile']['feedback']['numPositive'];
+			$feedback['negative'] = (int)$account_data['profile']['feedback']['numNegative'];
+			$feedback['neutral'] = (int)$account_data['profile']['feedback']['numNeutral'];
+
+			return $feedback;
 		}
 		else
 		{
 			throw new \phpbb\exception\http_exception($status);
 		}
+	}
+
+	private function update_user_heatware_id( $db, $heatware_id, $user_id )
+	{
+		$sql_array = array(
+			'heatware_id' => $heatware_id,
+		);
+
+		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
+		$db->sql_query($sql);
+	}
+
+	private function update_user_heatware_feedback( $db, $feedback, $user_id )
+	{
+		$sql_array = array(
+			'heatware_suspended' => $feedback['status'],
+			'heatware_positive' => $feedback['positive'],
+			'heatware_negative' => $feedback['negative'],
+			'heatware_neutral' => $feedback['neutral'],
+		);
+		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
+		$db->sql_query($sql);
 	}
 }
