@@ -7,23 +7,21 @@ namespace HeatWare\integration\cron\task;
  */
 class HeatWareSync extends \phpbb\cron\task\base
 {
-	/**
-	 * How often we run the cron (in seconds).
-	 * @var int
-	 */
 	protected $cron_frequency;
 
-	/** @var \phpbb\config\config */
 	protected $config;
+
+	protected $db;
 
 	/**
 	* Constructor
 	*
 	* @param \phpbb\config\config $config Config object
 	*/
-	public function __construct(\phpbb\config\config $config)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db)
 	{
 		$this->config = $config;
+		$this->db = $db;
 		$this->cron_frequency = $this->config['heatware_sync_frequency'];
 	}
 
@@ -34,8 +32,6 @@ class HeatWareSync extends \phpbb\cron\task\base
 	*/
 	public function run()
 	{
-		global $db;
-
 		// If globally enabled, check all users. Otherwise only look for users who have enabled it
 		if ( $this->config['heatware_global_enable'] )
 		{
@@ -49,9 +45,9 @@ class HeatWareSync extends \phpbb\cron\task\base
 			$sql = 'SELECT user_id,heatware_id,user_email FROM ' . USERS_TABLE . ' WHERE ' . $db->sql_build_array('SELECT', $sql_array);
 		}
 
-		$results = $db->sql_query($sql);
+		$results = $this->db->sql_query($sql);
 
-		while ( $row = $db->sql_fetchrow($results) )
+		while ( $row = $this->db->sql_fetchrow($results) )
 		{
 			// What we need
 			$user_id = $row['user_id'];
@@ -65,7 +61,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 
 				if ( $heatware_id > 0 )
 				{
-					$this->update_user_heatware_id($db, $heatware_id, $user_id);
+					$this->update_user_heatware_id($heatware_id, $user_id);
 				}
 			}
 
@@ -74,12 +70,12 @@ class HeatWareSync extends \phpbb\cron\task\base
 			{
 				$feedback = $this->get_user_info( $heatware_id );
 
-				$this->update_user_heatware_feedback($db, $feedback, $user_id);
+				$this->update_user_heatware_feedback($feedback, $user_id);
 			}
 		}
 
 		// Cleanup
-		$db->sql_freeresult($results);
+		$this->db->sql_freeresult($results);
 		$this->config->set('heatware_sync_last_run', time(), false);
 	}
 
@@ -158,17 +154,17 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 	}
 
-	private function update_user_heatware_id( $db, $heatware_id, $user_id )
+	private function update_user_heatware_id( $heatware_id, $user_id )
 	{
 		$sql_array = array(
 			'heatware_id' => $heatware_id,
 		);
 
-		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
-		$db->sql_query($sql);
+		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
+		$this->db->sql_query($sql);
 	}
 
-	private function update_user_heatware_feedback( $db, $feedback, $user_id )
+	private function update_user_heatware_feedback( $feedback, $user_id )
 	{
 		$sql_array = array(
 			'heatware_suspended' => $feedback['status'],
@@ -176,7 +172,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 			'heatware_negative' => $feedback['negative'],
 			'heatware_neutral' => $feedback['neutral'],
 		);
-		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
-		$db->sql_query($sql);
+		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . ' WHERE user_id = ' . (int)$user_id;
+		$this->db->sql_query($sql);
 	}
 }
