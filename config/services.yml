@@ -10,7 +10,7 @@ services:
             - '@template'
             - '@user'
 
-    HeatWare.integration.cron.task.heatware_sync:
+    HeatWare.integration.cron.task.HeatWareSync:
         class: HeatWare\integration\cron\task\HeatWareSync
         arguments:
             - '@config'
