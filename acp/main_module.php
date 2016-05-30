@@ -36,12 +36,6 @@ class main_module
 			trigger_error($user->lang('HEATWARE_SAVED') . adm_back_link($this->u_action));
 		}
 
-        $global_enable_setting = '';
-        if(  )
-        {
-            $global_enable_setting = 'checked';
-        }
-
 		$template->assign_vars(array(
 			'U_ACTION'                  => $this->u_action,
             'L_HEATWARE_API_KEY'        => $user->lang('HEATWARE_API_KEY_SETTING'),
