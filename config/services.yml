@@ -14,7 +14,7 @@ services:
         class: HeatWare\integration\cron\task\HeatWareSync
         arguments:
             - '@config'
-            - '@db'
+            - '@dbal.conn'
         calls:
             - [set_name, [cron.task.HeatWareSync]]
         tags:
