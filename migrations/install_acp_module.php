@@ -19,6 +19,7 @@ class install_acp_module extends \phpbb\db\migration\migration
 		return array(
 			array('config.add', array('heatware_api_key', '')),
 			array('config.add', array('heatware_sync_frequency', 86400)),
+			array('config.add', array('heatware_sync_last_run', time())),
 			array('config.add', array('heatware_global_enable', 1)),
 			array('config.add', array('heatware_api_finduser', 'https://www.heatware.com/api/findUser')),
 			array('config.add', array('heatware_api_getuser', 'https://www.heatware.com/api/user')),
