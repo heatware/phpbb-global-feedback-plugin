@@ -1,12 +1,4 @@
 services:
-    HeatWare.integration.controller:
-        class: HeatWare\integration\controller\main
-        arguments:
-            - '@config'
-            - '@controller.helper'
-            - '@template'
-            - '@user'
-
     HeatWare.integration.cron.task.HeatWareSync:
         class: HeatWare\integration\cron\task\HeatWareSync
         arguments:
