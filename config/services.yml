@@ -14,8 +14,9 @@ services:
         class: HeatWare\integration\cron\task\HeatWareSync
         arguments:
             - '@config'
+            - '@db'
         calls:
-            - [set_name, [cron.task.heatware_sync]]
+            - [set_name, [cron.task.HeatWareSync]]
         tags:
             - { name: cron.task }
 
