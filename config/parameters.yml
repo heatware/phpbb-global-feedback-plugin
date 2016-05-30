@@ -1,2 +1,0 @@
-parameters:
-    HeatWare.integration.tables.heatware_cache: '%core.table_prefix%heatware_cache'

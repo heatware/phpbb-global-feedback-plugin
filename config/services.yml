@@ -1,6 +1,3 @@
-imports:
-    - { resource: parameters.yml }
-
 services:
     HeatWare.integration.controller:
         class: HeatWare\integration\controller\main
