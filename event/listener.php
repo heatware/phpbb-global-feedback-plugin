@@ -43,9 +43,19 @@ class listener implements EventSubscriberInterface
 
             if ( $event['user_poster_data']['heatware_id'] > 0 && ($config['heatware_global_enable'] || $event['user_poster_data']['heatware_enabled']) )
             {
-                $feedback .= '<a href="https://www.heatware.com/u/' . $event['user_poster_data']['heatware_id'] . '">"' .
-                    $event['user_poster_data']['heatware_positive'] . $event['user_poster_data']['heatware_negative'] .
-                    $event['user_poster_data']['heatware_neutral'] .'</a>';
+                $feedback .= '<a href="https://www.heatware.com/u/' . $event['user_poster_data']['heatware_id'] . '">';
+                if( $event['user_poster_data']['heatware_suspended'] == '1' )
+                {
+                    $feedback .= 'SUSPENDED';
+                }
+                else
+                {
+                    $feedback .= $event['user_poster_data']['heatware_positive'] . '-' .
+                                $event['user_poster_data']['heatware_negative'] . '-' .
+                                $event['user_poster_data']['heatware_neutral'];
+                }
+
+                $feedback .= '</a>';
             }
             else
             {
