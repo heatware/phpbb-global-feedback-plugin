@@ -5,7 +5,7 @@ namespace HeatWare\integration\cron\task;
 use Requests;
 
 /**
- * Cron task for updating the local feedback cache
+ * Cron task for updating feedback stored in the users table
  */
 class HeatWareSync extends \phpbb\cron\task\base
 {
@@ -19,6 +19,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 	* Constructor
 	*
 	* @param \phpbb\config\config $config Config object
+	* @param \phpbb\db\driver\driver_interface $db DBAL connection object
 	*/
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db)
 	{
@@ -28,7 +29,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 	}
 
 	/**
-	* Runs this cron task.
+	* Looks for heatware IDs for any users missing it and then updates all feedback info
 	*
 	* @return null
 	*/
@@ -68,6 +69,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 			}
 
 			// Verify we actually have a heatware id. It's not guaranteed that the lookup above returned a valid id!
+			// We want to keep feedback updated even if a user has it currently off. That way if they enable it's up to date.
 			if ( $heatware_id > 0 )
 			{
 				$feedback = $this->get_user_info( $heatware_id );
@@ -82,29 +84,44 @@ class HeatWareSync extends \phpbb\cron\task\base
 	}
 
 	/**
-	* Returns whether this cron task can run, given current board configuration.
-	*
-	* For example, a cron task that prunes forums can only run when
-	* forum pruning is enabled.
+	* Checks for requirements to run cron task
 	*
 	* @return bool
 	*/
 	public function is_runnable()
 	{
+		// With no API key there is no point in running
+		if( empty($this->config['heatware_api_key']) )
+		{
+			return false;
+		}
+
 		return true;
 	}
 
 	/**
-	* Returns whether this cron task should run now, because enough time
-	* has passed since it was last run.
+	* Checks timestamps to see if the cron should run
 	*
 	* @return bool
 	*/
 	public function should_run()
 	{
-		return $this->config['heatware_sync_last_run'] < time() - $this->cron_frequency;
+		if( $this->config['heatware_sync_last_run'] < (time() - $this->cron_frequency) )
+		{
+			return true;
+		}
+
+		return false;
 	}
 
+	/**
+	 * Obtains HeatWare ID for a provided email
+	 *
+	 * @param $email
+	 *
+	 * @return int
+	 * @throws \phpbb\exception\http_exception
+	 */
 	private function get_user_id( $email )
 	{
 		$url = $this->config['heatware_api_finduser'] . '?' . 'email=' . $email;
@@ -127,6 +144,14 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 	}
 
+	/**
+	 * Queries API for all the user info and returns an array of what is needed
+	 *
+	 * @param $user_id
+	 *
+	 * @return array
+	 * @throws \phpbb\exception\http_exception
+	 */
 	private function get_user_info( $user_id )
 	{
 		$url = $this->config['heatware_api_getuser'] . '?' . 'userId=' . $user_id;
@@ -138,11 +163,11 @@ class HeatWareSync extends \phpbb\cron\task\base
 			$account_data = json_decode( $response->body, true );
 			if ( $account_data['profile']['accountStatus'] == 'SUSPENDED' )
 			{
-				$feedback['status'] = 1;
+				$feedback['suspended'] = 1;
 			}
 			else
 			{
-				$feedback['status'] = 0;
+				$feedback['suspended'] = 0;
 			}
 			$feedback['positive'] = (int)$account_data['profile']['feedback']['numPositive'];
 			$feedback['negative'] = (int)$account_data['profile']['feedback']['numNegative'];
@@ -156,6 +181,14 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 	}
 
+    /**
+     * Stores the HeatWare ID for a given user id.
+     *
+     * @param $heatware_id
+     * @param $user_id
+     *
+     * @return null
+     */
 	private function update_user_heatware_id( $heatware_id, $user_id )
 	{
 		$sql_array = array(
@@ -166,10 +199,17 @@ class HeatWareSync extends \phpbb\cron\task\base
 		$this->db->sql_query($sql);
 	}
 
+    /**
+     * Stores the HeatWare ID for a given user id.
+     *
+     * @param $feedback array of feedback to store for a given user id
+     *
+     * @return null
+     */
 	private function update_user_heatware_feedback( $feedback, $user_id )
 	{
 		$sql_array = array(
-			'heatware_suspended' => $feedback['status'],
+			'heatware_suspended' => $feedback['suspended'],
 			'heatware_positive' => $feedback['positive'],
 			'heatware_negative' => $feedback['negative'],
 			'heatware_neutral' => $feedback['neutral'],
