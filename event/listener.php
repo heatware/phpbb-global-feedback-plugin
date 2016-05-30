@@ -21,6 +21,7 @@ class listener implements EventSubscriberInterface
 
     public function viewtopic_cache_heatware_to_user_data($event)
     {
+        // Make sure to cache all of the values we need when modifying the post row
         $user_cache_data = $event['user_cache_data'];
         $user_cache_data['heatware_enabled'] = $event['row']['heatware_enabled'];
         $user_cache_data['heatware_id'] = $event['row']['heatware_id'];
@@ -34,7 +35,7 @@ class listener implements EventSubscriberInterface
     public function viewtopic_add_heatware_to_post_row($event)
     {
         global $config, $user;
-
+        
         if ($event['row']['user_id'] != ANONYMOUS)
         {
             $user->add_lang_ext('HeatWare/integration', 'common');
