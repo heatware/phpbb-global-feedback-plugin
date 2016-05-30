@@ -16,7 +16,12 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "rmccue/requests": "v1.6.1"
+        "rmccue/requests": "1.6.1"
+    },
+    "autoload": {
+        "classmap": {
+            "Requests\\": "vendor/rmccue/requests"
+        }
     },
     "extra": {
         "display-name": "HeatWare Integration",

@@ -2,6 +2,8 @@
 
 namespace HeatWare\integration\cron\task;
 
+use Requests;
+
 /**
  * Cron task for updating the local feedback cache
  */
