@@ -8,7 +8,7 @@ class main_module
 
 	function main($id, $mode)
 	{
-		global $db, $request, $template, $user;
+		global $db, $request, $template, $user, $config;
 
 		$user->add_lang_ext('HeatWare/integration', 'common');
 		$this->tpl_name = 'ucp_body';
@@ -36,15 +36,11 @@ class main_module
 			trigger_error($message);
 		}
 
-		$show_badge_setting = '';
-		if( $user->data['heatware_enabled'] )
-		{
-			$show_badge_setting = 'checked';
-		}
-
 		$template->assign_vars(array(
 			'L_HEATWARE_SHOW_BADGE'	=> $user->lang('HEATWARE_SHOW_BADGE_SETTING'),
-			'S_HEATWARE_SHOW_BADGE'	=> $show_badge_setting,
+			'S_HEATWARE_SHOW_BADGE'	=> $user->data['heatware_enabled'],
+			'L_HEATWARE_GLOBAL_ENABLED' => $user->lang('HEATWARE_GLOBAL_ENABLED'),
+			'S_HEATWARE_GLOBAL_ENABLED' => $config['heatware_global_enable'],
 			'S_UCP_ACTION'	=> $this->u_action,
 		));
 	}

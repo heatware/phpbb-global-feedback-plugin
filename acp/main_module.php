@@ -37,7 +37,7 @@ class main_module
 		}
 
         $global_enable_setting = '';
-        if( $config['heatware_global_enable'] )
+        if(  )
         {
             $global_enable_setting = 'checked';
         }
@@ -49,7 +49,7 @@ class main_module
             'L_HEATWARE_SYNC_FREQUENCY' => $user->lang('HEATWARE_SYNC_SETTING'),
 			'S_HEATWARE_SYNC_FREQUENCY' => $config['heatware_sync_frequency'],
             'L_HEATWARE_GLOBAL_ENABLE' => $user->lang('HEATWARE_GLOBAL_SETTING'),
-            'S_HEATWARE_GLOBAL_ENABLE' => $global_enable_setting,
+            'S_HEATWARE_GLOBAL_ENABLE' => $config['heatware_global_enable'],
 		));
 	}
 }

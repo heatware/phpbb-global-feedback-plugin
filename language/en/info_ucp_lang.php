@@ -11,5 +11,6 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'HEATWARE_SHOW_BADGE_SETTING'				=> 'Show my HeatWare badge',
+	'HEATWARE_SHOW_BADGE_SETTING'	=> 'Show my HeatWare badge',
+	'HEATWARE_GLOBAL_ENABLED'		=> 'NOTE: The forum administrators have globally enabled HeatWare feedback. Changing this setting will make no difference.',
 ));
