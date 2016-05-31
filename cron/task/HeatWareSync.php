@@ -15,8 +15,6 @@ class HeatWareSync extends \phpbb\cron\task\base
 
 	protected $db;
 
-    protected $log;
-
     protected $user;
 
 	/**
@@ -25,7 +23,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 	* @param \phpbb\config\config $config Config object
 	* @param \phpbb\db\driver\driver_interface $db DBAL connection object
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\user $user)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user)
 	{
 		$this->config = $config;
 		$this->db = $db;
@@ -82,7 +80,6 @@ class HeatWareSync extends \phpbb\cron\task\base
                 }
             }
             catch (\phpbb\exception\runtime_exception $e) {
-                $this->log->add('critical',0, NULL, $e->getMessage(), time());
                 break;
             }
 		}
@@ -150,7 +147,8 @@ class HeatWareSync extends \phpbb\cron\task\base
 		else
 		{
             $this->user->add_lang_ext('HeatWare/integration', 'common');
-            $this->log->add('critical',$this->user->data['user_id'], $this->user->ip, $this->user->lang('HEATWARE_HTTP_ERROR'), time(), array($status,'findUser',$email));
+            $message = $this->user->lang('HEATWARE_HTTP_ERROR',$status,'findUser',$email);
+            add_log('critical','LOG_GENERAL_ERROR','',$message );
 			throw new \phpbb\exception\http_exception($status);
 		}
 	}
@@ -189,7 +187,8 @@ class HeatWareSync extends \phpbb\cron\task\base
 		else
 		{
             $this->user->add_lang_ext('HeatWare/integration', 'common');
-            $this->log->add('critical',$this->user->data['user_id'], $this->user->ip, $this->user->lang('HEATWARE_HTTP_ERROR'), time(), array($status,'user',$heatware_id));
+            $message = $this->user->lang('HEATWARE_HTTP_ERROR',$status,'user',$heatware_id);
+            add_log('critical','LOG_GENERAL_ERROR','',$message );
             throw new \phpbb\exception\http_exception($status);
 		}
 	}

@@ -4,7 +4,6 @@ services:
         arguments:
             - '@config'
             - '@dbal.conn'
-            - '@log'
             - '@user'
         calls:
             - [set_name, [cron.task.HeatWareSync]]
