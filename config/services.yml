@@ -1,0 +1,16 @@
+services:
+    HeatWare.integration.cron.task.HeatWareSync:
+        class: HeatWare\integration\cron\task\HeatWareSync
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '@user'
+        calls:
+            - [set_name, [cron.task.HeatWareSync]]
+        tags:
+            - { name: cron.task }
+
+    HeatWare.integration.listener:
+        class: HeatWare\integration\event\listener
+        tags:
+            - { name: event.listener }

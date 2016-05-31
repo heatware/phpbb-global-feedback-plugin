@@ -1,0 +1,28 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{L_SETTINGS}</h1>
+
+<form id="acp_board" method="post" action="{U_ACTION}">
+	<fieldset>
+		<dl>
+			<dt><label for="heatware_api_key">{L_HEATWARE_API_KEY}</label></dt>
+			<dd><input type="text" class="text_input" name="heatware_api_key" value="{S_HEATWARE_API_KEY}"/></dd>
+		</dl>
+		<dl>
+			<dt><label for="heatware_sync_frequency">{L_HEATWARE_SYNC_FREQUENCY}</label></dt>
+			<dd><input type="text" class="text_input" name="heatware_sync_frequency" value="{S_HEATWARE_SYNC_FREQUENCY}"/></dd>
+		</dl>
+		<dl>
+			<dt><label for="heatware_global_enable">{L_HEATWARE_GLOBAL_ENABLE}</label></dt>
+			<dd><input type="checkbox" class="checkbox_input" name="heatware_global_enable" value="1" <!-- IF S_HEATWARE_GLOBAL_ENABLE -->checked<!-- ENDIF -->/></dd>
+		</dl>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</p>
+
+		{S_FORM_TOKEN}
+	</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

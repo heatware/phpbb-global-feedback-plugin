@@ -1,0 +1,32 @@
+{
+    "name": "HeatWare/integration",
+    "type": "phpbb-extension",
+    "description": "",
+    "homepage": "https://github.com/heatware/phpbb-feedback-plugin",
+    "version": "1.0.0",
+    "time": "2016-04-28",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "HeatWare",
+            "email": "heatware.support@gmail.com",
+            "homepage": "https://www.heatware.com/",
+            "role": ""
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "rmccue/requests": "1.6.1"
+    },
+    "autoload": {
+        "classmap": {
+            "Requests\\": "vendor/rmccue/requests"
+        }
+    },
+    "extra": {
+        "display-name": "HeatWare Integration",
+        "soft-require": {
+            "phpbb/phpbb": ">=3.1.4,<3.2.0@dev"
+        }
+    }
+}
