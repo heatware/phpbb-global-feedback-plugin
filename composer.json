@@ -2,7 +2,7 @@
     "name": "HeatWare/integration",
     "type": "phpbb-extension",
     "description": "",
-    "homepage": "https://github.com/heatware/phpbb-feedback-plugin",
+    "homepage": "https://github.com/heatware/phpbb-global-feedback-plugin/",
     "version": "1.0.0",
     "time": "2016-04-28",
     "license": "GPL-2.0",
