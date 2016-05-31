@@ -17,18 +17,21 @@ class HeatWareSync extends \phpbb\cron\task\base
 
     protected $log;
 
+    protected $user;
+
 	/**
 	* Constructor
 	*
 	* @param \phpbb\config\config $config Config object
 	* @param \phpbb\db\driver\driver_interface $db DBAL connection object
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\user $user)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->cron_frequency = $this->config['heatware_sync_frequency'];
         $this->log = $log;
+        $this->user = $user;
 	}
 
 	/**
@@ -62,7 +65,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 
             try {
                 // If the heatware id is currently zero we will perform a lookup to see _if_ we can get a valid one
-                if ($heatware_id == 0) {
+                if ( $heatware_id == 0 && !empty($user_email) ) {
                     $heatware_id = $this->get_user_id($user_email);
 
                     if ($heatware_id > 0) {
@@ -79,7 +82,7 @@ class HeatWareSync extends \phpbb\cron\task\base
                 }
             }
             catch (\phpbb\exception\runtime_exception $e) {
-                $this->log->add('error','Anonymous', NULL, $e->getMessage(), time());
+                $this->log->add('critical',0, NULL, $e->getMessage(), time());
                 break;
             }
 		}
@@ -126,7 +129,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 	 * @param $email
 	 *
 	 * @return int
-	 * @throws \phpbb\exception\runtime_exception
+	 * @throws \phpbb\exception\http_exception
 	 */
 	private function get_user_id( $email )
 	{
@@ -146,8 +149,9 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 		else
 		{
-            $message = 'Error running HeatWare sync: ' . (string)$status . 'received on findUser with email ' . $email;
-			throw new \phpbb\exception\runtime_exception($message);
+            $this->user->add_lang_ext('HeatWare/integration', 'common');
+            $this->log->add('critical',$this->user->data['user_id'], $this->user->ip, $this->user->lang('HEATWARE_HTTP_ERROR'), time(), array($status,'findUser',$email));
+			throw new \phpbb\exception\http_exception($status);
 		}
 	}
 
@@ -157,7 +161,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 	 * @param $heatware_id
 	 *
 	 * @return array
-	 * @throws \phpbb\exception\runtime_exception
+	 * @throws \phpbb\exception\http_exception
 	 */
 	private function get_user_info( $heatware_id )
 	{
@@ -184,8 +188,9 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 		else
 		{
-            $message = 'Error running HeatWare sync: ' . (string)$status . 'received on getUser with id ' . $heatware_id;
-			throw new \phpbb\exception\runtime_exception($message);
+            $this->user->add_lang_ext('HeatWare/integration', 'common');
+            $this->log->add('critical',$this->user->data['user_id'], $this->user->ip, $this->user->lang('HEATWARE_HTTP_ERROR'), time(), array($status,'user',$heatware_id));
+            throw new \phpbb\exception\http_exception($status);
 		}
 	}
 

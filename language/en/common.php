@@ -16,3 +16,8 @@ $lang = array_merge($lang, array(
 	'HEATWARE_SAVED'			=> 'Settings saved',
 	'HEATWARE_FEEDBACK_PREFIX'	=> 'HeatWare:',
 ));
+
+// Logging
+$lang = array_merge($lang, array(
+	'HEATWARE_HTTP_ERROR'	=> '<strong>Error running HeatWare sync</strong><br/>Error: %1$s<br/>Operation: %2$s<br/>Parameter: %3$s',
+));
