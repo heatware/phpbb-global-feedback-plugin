@@ -15,17 +15,20 @@ class HeatWareSync extends \phpbb\cron\task\base
 
 	protected $db;
 
+    protected $log;
+
 	/**
 	* Constructor
 	*
 	* @param \phpbb\config\config $config Config object
 	* @param \phpbb\db\driver\driver_interface $db DBAL connection object
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->cron_frequency = $this->config['heatware_sync_frequency'];
+        $this->log = $log;
 	}
 
 	/**
@@ -57,25 +60,28 @@ class HeatWareSync extends \phpbb\cron\task\base
 			$user_email = $row['user_email'];
 			$heatware_id = $row['heatware_id'];
 
-			// If the heatware id is currently zero we will perform a lookup to see _if_ we can get a valid one
-			if ( $heatware_id == 0 )
-			{
-				$heatware_id = $this->get_user_id($user_email);
+            try {
+                // If the heatware id is currently zero we will perform a lookup to see _if_ we can get a valid one
+                if ($heatware_id == 0) {
+                    $heatware_id = $this->get_user_id($user_email);
 
-				if ( $heatware_id > 0 )
-				{
-					$this->update_user_heatware_id($heatware_id, $user_id);
-				}
-			}
+                    if ($heatware_id > 0) {
+                        $this->update_user_heatware_id($heatware_id, $user_id);
+                    }
+                }
 
-			// Verify we actually have a heatware id. It's not guaranteed that the lookup above returned a valid id!
-			// We want to keep feedback updated even if a user has it currently off. That way if they enable it's up to date.
-			if ( $heatware_id > 0 )
-			{
-				$feedback = $this->get_user_info( $heatware_id );
+                // Verify we actually have a heatware id. It's not guaranteed that the lookup above returned a valid id!
+                // We want to keep feedback updated even if a user has it currently off. That way if they enable it's up to date.
+                if ($heatware_id > 0) {
+                    $feedback = $this->get_user_info($heatware_id);
 
-				$this->update_user_heatware_feedback($feedback, $user_id);
-			}
+                    $this->update_user_heatware_feedback($feedback, $user_id);
+                }
+            }
+            catch (\phpbb\exception\runtime_exception $e) {
+                $this->log->add('error','Anonymous', NULL, $e->getMessage(), time());
+                break;
+            }
 		}
 
 		// Cleanup
@@ -120,7 +126,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 	 * @param $email
 	 *
 	 * @return int
-	 * @throws \phpbb\exception\http_exception
+	 * @throws \phpbb\exception\runtime_exception
 	 */
 	private function get_user_id( $email )
 	{
@@ -140,21 +146,22 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 		else
 		{
-			throw new \phpbb\exception\http_exception($status);
+            $message = 'Error running HeatWare sync: ' . (string)$status . 'received on findUser with email ' . $email;
+			throw new \phpbb\exception\runtime_exception($message);
 		}
 	}
 
 	/**
 	 * Queries API for all the user info and returns an array of what is needed
 	 *
-	 * @param $user_id
+	 * @param $heatware_id
 	 *
 	 * @return array
-	 * @throws \phpbb\exception\http_exception
+	 * @throws \phpbb\exception\runtime_exception
 	 */
-	private function get_user_info( $user_id )
+	private function get_user_info( $heatware_id )
 	{
-		$url = $this->config['heatware_api_getuser'] . '?' . 'userId=' . $user_id;
+		$url = $this->config['heatware_api_getuser'] . '?' . 'userId=' . $heatware_id;
 		$response = Requests::get($url, array('X-API-KEY' => $this->config['heatware_api_key']));
 		$status = $response->status_code;
 		if ( $status == 200 )
@@ -177,7 +184,8 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 		else
 		{
-			throw new \phpbb\exception\http_exception($status);
+            $message = 'Error running HeatWare sync: ' . (string)$status . 'received on getUser with id ' . $heatware_id;
+			throw new \phpbb\exception\runtime_exception($message);
 		}
 	}
 
