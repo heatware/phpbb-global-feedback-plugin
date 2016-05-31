@@ -7,7 +7,7 @@
 			<fieldset>
 				<dl>
 					<dt><label for="heatware_enabled">{L_HEATWARE_SHOW_BADGE}</label><br/><!-- IF S_HEATWARE_GLOBAL_ENABLED -->{L_HEATWARE_GLOBAL_ENABLED}<!-- ENDIF --></dt>
-					<dd><input type="checkbox" class="checkbox_input" name="heatware_enabled" value="1" <!-- IF S_HEATWARE_SHOW_BADGE -->checked<!-- ENDIF --> /></dd>
+					<dd><input type="checkbox" class="checkbox_input" name="heatware_enabled" value="1" <!-- IF S_HEATWARE_SHOW_BADGE -->checked<!-- ENDIF --><!-- IF S_HEATWARE_GLOBAL_ENABLED -->readonly<!-- ENDIF --> /></dd>
 				</dl>
 			</fieldset>
 		</div>
