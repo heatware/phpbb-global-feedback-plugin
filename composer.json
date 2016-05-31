@@ -27,6 +27,11 @@
         "display-name": "HeatWare Feedback Integration",
         "soft-require": {
             "phpbb/phpbb": ">=3.1.4,<3.2.0@dev"
+        },
+        "version-check": {
+            "host": "www.heatware.com",
+            "directory": "/tools",
+            "filename": "versions_phpbb.json"
         }
     }
 }

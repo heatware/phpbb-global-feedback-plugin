@@ -1,0 +1,11 @@
+{
+  "stable": {
+    "1.0": {
+      "current": "1.0.0",
+      "announcement": "https://www.phpbb.com/community/viewtopic.php#",
+      "download": "https://www.phpbb.com/download_id#",
+      "eol": null,
+      "security": false
+    }
+  }
+}
