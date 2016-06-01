@@ -31,7 +31,7 @@
         "version-check": {
             "host": "www.heatware.com",
             "directory": "/tools",
-            "filename": "versions_phpbb.json"
+            "filename": "phpbb_plugin_version_check"
         }
     }
 }
