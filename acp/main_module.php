@@ -43,8 +43,9 @@ class main_module
             'L_HEATWARE_SYNC_FREQUENCY' => $user->lang('HEATWARE_SYNC_SETTING'),
 			'S_HEATWARE_SYNC_FREQUENCY' => $config['heatware_sync_frequency'],
 			'L_HEATWARE_SYNC_DESC'		=> $user->lang('HEATWARE_SYNC_DESC'),
-            'L_HEATWARE_GLOBAL_ENABLE' => $user->lang('HEATWARE_GLOBAL_SETTING'),
-            'S_HEATWARE_GLOBAL_ENABLE' => $config['heatware_global_enable'],
+            'L_HEATWARE_GLOBAL_ENABLE' 	=> $user->lang('HEATWARE_GLOBAL_SETTING'),
+			'L_HEATWARE_GLOBAL_DESC'	=> $user->lang('HEATWARE_GLOBAL_DESC'),
+            'S_HEATWARE_GLOBAL_ENABLE' 	=> $config['heatware_global_enable'],
 		));
 	}
 }

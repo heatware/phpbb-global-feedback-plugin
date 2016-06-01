@@ -16,4 +16,5 @@ $lang = array_merge($lang, array(
 	'HEATWARE_SYNC_SETTING'		=> 'Feedback synchronization frequency',
 	'HEATWARE_SYNC_DESC'		=> 'Time in seconds, min: 3600',
 	'HEATWARE_GLOBAL_SETTING'	=> 'Enable feedback badges for all users',
+	'HEATWARE_GLOBAL_DESC'		=> 'Checked: Enable feedback badge for all users. Unchecked: Lets users decide for themselves.',
 ));
