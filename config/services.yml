@@ -5,6 +5,7 @@ services:
             - '@config'
             - '@dbal.conn'
             - '@user'
+            - '@log'
         calls:
             - [set_name, [cron.task.HeatWareSync]]
         tags:

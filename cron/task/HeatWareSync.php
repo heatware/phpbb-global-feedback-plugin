@@ -17,19 +17,22 @@ class HeatWareSync extends \phpbb\cron\task\base
 
     protected $user;
 
+	protected $phpbb_log;
+
 	/**
 	* Constructor
 	*
 	* @param \phpbb\config\config $config Config object
 	* @param \phpbb\db\driver\driver_interface $db DBAL connection object
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $phpbb_log)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->cron_frequency = $this->config['heatware_sync_frequency'];
         $this->log = $log;
         $this->user = $user;
+		$this->phpbb_log = $phpbb_log;
 	}
 
 	/**
@@ -148,7 +151,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 		{
             $this->user->add_lang_ext('HeatWare/integration', 'common');
             $message = $this->user->lang('HEATWARE_HTTP_ERROR',$status,'findUser',$email);
-            add_log('critical','LOG_GENERAL_ERROR','',$message );
+			$this->phpbb_log->add('critical',$this->user->data['user_id'], $this->user->ip,'LOG_GENERAL_ERROR',time(),array('',$message) );
 			throw new \phpbb\exception\http_exception($status);
 		}
 	}
@@ -188,7 +191,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 		{
             $this->user->add_lang_ext('HeatWare/integration', 'common');
             $message = $this->user->lang('HEATWARE_HTTP_ERROR',$status,'user',$heatware_id);
-            add_log('critical','LOG_GENERAL_ERROR','',$message );
+            $this->phpbb_log->add('critical',$this->user->data['user_id'], $this->user->ip,'LOG_GENERAL_ERROR',time(),array('',$message) );
             throw new \phpbb\exception\http_exception($status);
 		}
 	}
