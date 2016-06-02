@@ -79,7 +79,15 @@ class HeatWareSync extends \phpbb\cron\task\base
                 if ($heatware_id > 0) {
                     $feedback = $this->get_user_info($heatware_id);
 
-                    $this->update_user_heatware_feedback($feedback, $user_id);
+					if ( $feedback['status'] == 'ok' )
+					{
+						$this->update_user_heatware_feedback($feedback, $user_id);
+					}
+                    else
+					{
+						// We 404'd so the user ID is no longer valid, reset to zero
+						$this->update_user_heatware_id(0, $user_id);
+					}
                 }
             }
             catch (\phpbb\exception\runtime_exception $e) {
@@ -184,7 +192,14 @@ class HeatWareSync extends \phpbb\cron\task\base
 			$feedback['positive'] = (int)$account_data['profile']['feedback']['numPositive'];
 			$feedback['negative'] = (int)$account_data['profile']['feedback']['numNegative'];
 			$feedback['neutral'] = (int)$account_data['profile']['feedback']['numNeutral'];
+			$feedback['status'] = 'ok';
 
+			return $feedback;
+		}
+		elseif ( $status == 404 )
+		{
+			// If an account was deleted we would get a 404
+			$feedback['status'] = 'Not Found';
 			return $feedback;
 		}
 		else
