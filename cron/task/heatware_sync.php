@@ -52,7 +52,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 			$sql_array = array(
 				'heatware_enabled' => '1',
 			);
-			$sql = 'SELECT user_id,heatware_id,user_email FROM ' . USERS_TABLE . ' WHERE ' . $db->sql_build_array('SELECT', $sql_array);
+			$sql = 'SELECT user_id,heatware_id,user_email FROM ' . USERS_TABLE . ' WHERE ' . $this->db->sql_build_array('SELECT', $sql_array);
 		}
 
 		$results = $this->db->sql_query($sql);
