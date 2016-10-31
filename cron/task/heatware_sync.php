@@ -24,6 +24,8 @@ class HeatWareSync extends \phpbb\cron\task\base
 	*
 	* @param \phpbb\config\config $config Config object
 	* @param \phpbb\db\driver\driver_interface $db DBAL connection object
+	* @param \phpbb\user $user Current user object
+	* @param \phpbb\log\log $phpbb_log Log object for writing events
 	*/
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $phpbb_log)
 	{
