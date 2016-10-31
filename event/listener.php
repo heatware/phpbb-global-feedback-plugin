@@ -47,7 +47,7 @@ class listener implements EventSubscriberInterface
                 $feedback .= '<a href="https://www.heatware.com/u/' . $event['user_poster_data']['heatware_id'] . '">';
                 if( $event['user_poster_data']['heatware_suspended'] == '1' )
                 {
-                    $feedback .= 'SUSPENDED';
+                    $feedback .= $user->lang('HEATWARE_SUSPENDED');
                 }
                 else
                 {
@@ -60,7 +60,7 @@ class listener implements EventSubscriberInterface
             }
             else
             {
-                $feedback .= 'Not Available';
+                $feedback .= $user->lang('HEATWARE_NOT_AVAILABLE');
             }
 
             $post_row = $event['post_row'];

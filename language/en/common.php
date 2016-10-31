@@ -15,6 +15,8 @@ $lang = array_merge($lang, array(
 	'HEATWARE_TITLE'			=> 'HeatWare',
 	'HEATWARE_SAVED'			=> 'Settings saved',
 	'HEATWARE_FEEDBACK_PREFIX'	=> 'HeatWare:',
+	'HEATWARE_NOT_AVAILABLE'    => 'Not Available',
+	'HEATWARE_SUSPENDED'        => 'SUSPENDED',
 ));
 
 // Logging
