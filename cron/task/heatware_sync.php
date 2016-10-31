@@ -43,6 +43,15 @@ class HeatWareSync extends \phpbb\cron\task\base
 	*/
 	public function run()
 	{
+		$limit = 500;
+
+		// For performance reasons we want to break up the results to that we only work on a subset of accounts
+		$sql = 'SELECT COUNT(user_id) as total FROM ' . USERS_TABLE;
+		$results = $this->db->sql_query($sql);
+		$total_users = (int) $this->db->sql_fetchfield('total');
+		$this->db->sql_freeresult($results);
+		$loops = (int) floor($total_users / $limit);
+
 		// If globally enabled, check all users. Otherwise only look for users who have enabled it
 		if ( $this->config['heatware_global_enable'] )
 		{
@@ -56,48 +65,46 @@ class HeatWareSync extends \phpbb\cron\task\base
 			$sql = 'SELECT user_id,heatware_id,user_email FROM ' . USERS_TABLE . ' WHERE ' . $this->db->sql_build_array('SELECT', $sql_array);
 		}
 
-		$results = $this->db->sql_query($sql);
-
-		while ( $row = $this->db->sql_fetchrow($results) )
+		for( $index = 0; $index < $loops; $index++)
 		{
-			// What we need
-			$user_id = $row['user_id'];
-			$user_email = $row['user_email'];
-			$heatware_id = $row['heatware_id'];
+			$offset = $index * $limit;
+			$results = $this->db->sql_query_limit($sql, $limit, $offset);
 
-            try {
-                // If the heatware id is currently zero we will perform a lookup to see _if_ we can get a valid one
-                if ( $heatware_id == 0 && !empty($user_email) ) {
-                    $heatware_id = $this->get_user_id($user_email);
+			while ($row = $this->db->sql_fetchrow($results)) {
+				// What we need
+				$user_id = $row['user_id'];
+				$user_email = $row['user_email'];
+				$heatware_id = $row['heatware_id'];
 
-                    if ($heatware_id > 0) {
-                        $this->update_user_heatware_id($heatware_id, $user_id);
-                    }
-                }
+				try {
+					// If the heatware id is currently zero we will perform a lookup to see _if_ we can get a valid one
+					if ($heatware_id == 0 && !empty($user_email)) {
+						$heatware_id = $this->get_user_id($user_email);
 
-                // Verify we actually have a heatware id. It's not guaranteed that the lookup above returned a valid id!
-                // We want to keep feedback updated even if a user has it currently off. That way if they enable it's up to date.
-                if ($heatware_id > 0) {
-                    $feedback = $this->get_user_info($heatware_id);
-
-					if ( $feedback['status'] == 'ok' )
-					{
-						$this->update_user_heatware_feedback($feedback, $user_id);
+						if ($heatware_id > 0) {
+							$this->update_user_heatware_id($heatware_id, $user_id);
+						}
 					}
-                    else
-					{
-						// We 404'd so the user ID is no longer valid, reset to zero
-						$this->update_user_heatware_id(0, $user_id);
+
+					// Verify we actually have a heatware id. It's not guaranteed that the lookup above returned a valid id!
+					// We want to keep feedback updated even if a user has it currently off. That way if they enable it's up to date.
+					if ($heatware_id > 0) {
+						$feedback = $this->get_user_info($heatware_id);
+
+						if ($feedback['status'] == 'ok') {
+							$this->update_user_heatware_feedback($feedback, $user_id);
+						} else {
+							// We 404'd so the user ID is no longer valid, reset to zero
+							$this->update_user_heatware_id(0, $user_id);
+						}
 					}
-                }
-            }
-            catch (\phpbb\exception\runtime_exception $e) {
-                break;
-            }
+				} catch (\phpbb\exception\runtime_exception $e) {
+					break;
+				}
+			}
+			$this->db->sql_freeresult($results);
 		}
 
-		// Cleanup
-		$this->db->sql_freeresult($results);
 		$this->config->set('heatware_sync_last_run', time(), false);
 	}
 
