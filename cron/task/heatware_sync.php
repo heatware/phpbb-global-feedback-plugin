@@ -32,7 +32,6 @@ class HeatWareSync extends \phpbb\cron\task\base
 		$this->config = $config;
 		$this->db = $db;
 		$this->cron_frequency = $this->config['heatware_sync_frequency'];
-        $this->log = $log;
         $this->user = $user;
 		$this->phpbb_log = $phpbb_log;
 	}
