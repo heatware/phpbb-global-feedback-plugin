@@ -37,9 +37,7 @@ class main_module
 		}
 
 		$template->assign_vars(array(
-			'L_HEATWARE_SHOW_BADGE'	=> $user->lang('HEATWARE_SHOW_BADGE_SETTING'),
 			'S_HEATWARE_SHOW_BADGE'	=> $user->data['heatware_enabled'],
-			'L_HEATWARE_GLOBAL_ENABLED' => $user->lang('HEATWARE_GLOBAL_ENABLED'),
 			'S_HEATWARE_GLOBAL_ENABLED' => $config['heatware_global_enable'],
 			'S_UCP_ACTION'	=> $this->u_action,
 		));
