@@ -1,6 +1,6 @@
 <?php
 
-namespace HeatWare\integration\cron\task;
+namespace heatware\integration\cron\task;
 
 use Requests;
 

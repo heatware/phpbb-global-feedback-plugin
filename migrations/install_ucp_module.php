@@ -1,6 +1,6 @@
 <?php
 
-namespace HeatWare\integration\migrations;
+namespace heatware\integration\migrations;
 
 class install_ucp_module extends \phpbb\db\migration\migration
 {
