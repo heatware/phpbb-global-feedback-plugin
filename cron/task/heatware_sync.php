@@ -7,7 +7,7 @@ use Requests;
 /**
  * Cron task for updating feedback stored in the users table
  */
-class HeatWareSync extends \phpbb\cron\task\base
+class heatware_sync extends \phpbb\cron\task\base
 {
 	protected $cron_frequency;
 
@@ -165,7 +165,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 		else
 		{
-            $this->user->add_lang_ext('HeatWare/integration', 'common');
+            $this->user->add_lang_ext('heatware/integration', 'common');
             $message = $this->user->lang('HEATWARE_HTTP_ERROR',$status,'findUser',$email);
 			$this->phpbb_log->add('critical',$this->user->data['user_id'], $this->user->ip,'LOG_GENERAL_ERROR',time(),array('',$message) );
 			throw new \phpbb\exception\http_exception($status);
@@ -212,7 +212,7 @@ class HeatWareSync extends \phpbb\cron\task\base
 		}
 		else
 		{
-            $this->user->add_lang_ext('HeatWare/integration', 'common');
+            $this->user->add_lang_ext('heatware/integration', 'common');
             $message = $this->user->lang('HEATWARE_HTTP_ERROR',$status,'user',$heatware_id);
             $this->phpbb_log->add('critical',$this->user->data['user_id'], $this->user->ip,'LOG_GENERAL_ERROR',time(),array('',$message) );
             throw new \phpbb\exception\http_exception($status);
