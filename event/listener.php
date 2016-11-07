@@ -40,11 +40,12 @@ class listener implements EventSubscriberInterface
         {
             $user->add_lang_ext('HeatWare/integration', 'common');
 
-            $feedback = $user->lang('HEATWARE_FEEDBACK_PREFIX') . ' ';
+            $post_row = $event['post_row'];
+            $post_row['HEATWARE_FEEDBACK_PREFIX'] = $user->lang('HEATWARE_FEEDBACK_PREFIX');
 
             if ( $event['user_poster_data']['heatware_id'] > 0 && ($config['heatware_global_enable'] || $event['user_poster_data']['heatware_enabled']) )
             {
-                $feedback .= '<a href="https://www.heatware.com/u/' . $event['user_poster_data']['heatware_id'] . '">';
+                $post_row['HEATWARE_ID'] = $event['user_poster_data']['heatware_id'];
                 if( $event['user_poster_data']['heatware_suspended'] == '1' )
                 {
                     $feedback .= $user->lang('HEATWARE_SUSPENDED');
@@ -55,15 +56,12 @@ class listener implements EventSubscriberInterface
                                 $event['user_poster_data']['heatware_negative'] . '-' .
                                 $event['user_poster_data']['heatware_neutral'];
                 }
-
-                $feedback .= '</a>';
             }
             else
             {
                 $feedback .= $user->lang('HEATWARE_NOT_AVAILABLE');
             }
 
-            $post_row = $event['post_row'];
             $post_row['HEATWARE_FEEDBACK'] = $feedback;
             $event['post_row'] = $post_row;
         }
