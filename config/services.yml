@@ -1,5 +1,5 @@
 services:
-    HeatWare.integration.cron.task.HeatWareSync:
+    heatware.integration.cron.task.HeatWareSync:
         class: heatware\integration\cron\task\HeatWareSync
         arguments:
             - '@config'
@@ -11,7 +11,7 @@ services:
         tags:
             - { name: cron.task }
 
-    HeatWare.integration.listener:
+    heatware.integration.listener:
         class: heatware\integration\event\listener
         tags:
             - { name: event.listener }
