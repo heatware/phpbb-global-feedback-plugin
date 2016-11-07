@@ -10,14 +10,14 @@ class main_module
 	{
 		global $config, $request, $template, $user;
 
-		$user->add_lang_ext('HeatWare/integration', 'common');
+		$user->add_lang_ext('heatware/integration', 'common');
 		$this->tpl_name = 'acp_body';
 		$this->page_title = $user->lang('HEATWARE_SETTINGS_TITLE');
 		add_form_key('HeatWare/integration');
 
 		if ($request->is_set_post('submit'))
 		{
-			if (!check_form_key('HeatWare/integration'))
+			if (!check_form_key('heatware/integration'))
 			{
 				trigger_error('FORM_INVALID');
 			}
