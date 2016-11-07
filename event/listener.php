@@ -38,7 +38,7 @@ class listener implements EventSubscriberInterface
         
         if ($event['row']['user_id'] != ANONYMOUS)
         {
-            $user->add_lang_ext('HeatWare/integration', 'common');
+            $user->add_lang_ext('heatware/integration', 'common');
 
             $post_row = $event['post_row'];
             $post_row['HEATWARE_FEEDBACK_PREFIX'] = $user->lang('HEATWARE_FEEDBACK_PREFIX');
