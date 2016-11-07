@@ -1,6 +1,6 @@
 <?php
 
-namespace HeatWare\integration\migrations;
+namespace heatware\integration\migrations;
 
 class install_user_schema extends \phpbb\db\migration\migration
 {

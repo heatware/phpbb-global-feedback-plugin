@@ -1,6 +1,6 @@
 <?php
 
-namespace HeatWare\integration\acp;
+namespace heatware\integration\acp;
 
 class main_module
 {

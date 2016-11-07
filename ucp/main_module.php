@@ -1,6 +1,6 @@
 <?php
 
-namespace HeatWare\integration\ucp;
+namespace heatware\integration\ucp;
 
 class main_module
 {

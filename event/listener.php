@@ -1,5 +1,5 @@
 <?php
-namespace HeatWare\integration\event;
+namespace heatware\integration\event;
 
 /**
  * @ignore
