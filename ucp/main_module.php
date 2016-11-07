@@ -10,7 +10,7 @@ class main_module
 	{
 		global $db, $request, $template, $user, $config;
 
-		$user->add_lang_ext('HeatWare/integration', 'common');
+		$user->add_lang_ext('heatware/integration', 'common');
 		$this->tpl_name = 'ucp_body';
 		$this->page_title = $user->lang('HEATWARE_SETTINGS_TITLE');
 		add_form_key('heatware/integration');

@@ -19,7 +19,7 @@ class install_ucp_module extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\HeatWare\integration\migrations\install_user_schema');
+		return array('\heatware\integration\migrations\install_user_schema');
 	}
 
 	public function update_data()
@@ -34,7 +34,7 @@ class install_ucp_module extends \phpbb\db\migration\migration
 				'ucp',
 				'HeatWare',
 				array(
-					'module_basename'	=> '\HeatWare\integration\ucp\main_module',
+					'module_basename'	=> '\heatware\integration\ucp\main_module',
 					'modes'				=> array('settings'),
 				),
 			)),

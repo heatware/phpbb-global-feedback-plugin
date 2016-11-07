@@ -7,7 +7,7 @@ class main_info
 	function module()
 	{
 		return array(
-			'filename'	=> '\HeatWare\integration\ucp\main_module',
+			'filename'	=> '\heatware\integration\ucp\main_module',
 			'title'		=> $user->lang('HEATWARE_TITLE'),
 			'modes'		=> array(
 				'settings'	=> array(
