@@ -1,13 +1,13 @@
 services:
-    HeatWare.integration.cron.task.HeatWareSync:
-        class: heatware\integration\cron\task\HeatWareSync
+    HeatWare.integration.cron.task.heatware_sync:
+        class: heatware\integration\cron\task\heatware_sync
         arguments:
             - '@config'
             - '@dbal.conn'
             - '@user'
             - '@log'
         calls:
-            - [set_name, [cron.task.HeatWareSync]]
+            - [set_name, [cron.task.heatware_sync]]
         tags:
             - { name: cron.task }
 
