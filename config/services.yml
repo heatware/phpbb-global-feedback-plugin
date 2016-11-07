@@ -1,6 +1,11 @@
 services:
+<<<<<<< HEAD
+    heatware.integration.cron.task.HeatWareSync:
+        class: heatware\integration\cron\task\HeatWareSync
+=======
     HeatWare.integration.cron.task.heatware_sync:
         class: heatware\integration\cron\task\heatware_sync
+>>>>>>> refs/remotes/origin/master
         arguments:
             - '@config'
             - '@dbal.conn'
@@ -11,7 +16,7 @@ services:
         tags:
             - { name: cron.task }
 
-    HeatWare.integration.listener:
+    heatware.integration.listener:
         class: heatware\integration\event\listener
         tags:
             - { name: event.listener }
